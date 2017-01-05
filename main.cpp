@@ -1,8 +1,82 @@
 #include<iostream>
 #include<fstream>
+#include<csting>
+#include<stdlib.h>
 #include<windows.h>
 using namespace std;
 int gasit=0;
+int verifyDeposit(char line[100])
+{
+    char sirAux[30];
+    int n=strlen(line)-1,p=0,iDeposit;
+    while(line[n]!=' ')
+        {
+        sirAux[p]=line[n];
+        p++;
+        n--;
+        }
+    sirAux[p]=NULL;
+    strrev(sirAux);
+    iDeposit=atoi(sirAux);
+    return iDeposit;
+}
+void useExistingAccount(int &gasit)
+{
+    char user[30],pass[30],line[100];
+    cout<<" ---------------------------------"<<endl;
+    cout<<"|      Black Jack - Accounts      |"<<endl;
+    cout<<" ---------------------------------"<<endl<<endl;
+    cout<<"Please enter your account details:"<<endl<<endl;
+    cout<<"Username: ";
+    cin>>user;
+    cout<<"Password: ";
+    cin>>pass;
+    cout<<endl;
+    cout<<"Retrieving your information.Please hold."<<endl;
+    Sleep(2000);
+    ifstream file("accounts.txt");
+    while(file.good())
+        {
+        file.getline(line,100);
+        if(strstr(line,user)!=0 && strstr(line,pass)!=0 && line[strlen(user)+strlen(pass)+1]==' ' && user[0]==line[0])//ultimele 2 sunt conditii mai tari
+            {
+            gasit=1;
+            break;
+            }
+        }
+    file.close();
+    if(gasit==1)
+        {
+        cout<<"You are in our database!";
+        Sleep(2000);
+        }
+    else
+        {
+        cout<<"Error. Your information isn't found in our database. Please try again.";
+        }
+}
+void createAccount()
+{
+    char user[30],pass[30];
+    int deposit;
+    cout<<" ---------------------------------"<<endl;
+    cout<<"|      Black Jack - Accounts      |"<<endl;
+    cout<<" ---------------------------------"<<endl<<endl;
+    cout<<"What Username would you like to use: ";
+    cin>>user;
+    cout<<"What Password would you like to use: ";
+    cin>>pass;
+    cout<<"What Deposit would you like to make: ";
+    cin>>deposit;
+    fstream file("accounts.txt", ios::out | ios::app);
+    file<<user<<" "<<pass<<" "<<deposit<<endl;
+    file.close();
+    cout<<endl;
+    cout<<"Creating account. Please hold."<<endl;
+    Sleep(2000);
+    cout<<"Registration successful. Congratulations!";
+    Sleep(2000);
+}
 void option1()
 {
     int x;
