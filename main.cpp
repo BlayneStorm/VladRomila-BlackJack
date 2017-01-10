@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<cstring>
 #include<stdlib.h>
 #include<windows.h>
 #include<time.h>
@@ -360,6 +361,122 @@ void checkWin(int sumPlayer, int &sumDealer, int nrCards, int surrender, int &di
         cout<<endl<<"You surrendered. Half of your original bet was returned to your account.";
         checkPlayAgain(joaca);
         }
+}
+void playGamevsComputer(int bet, int &depositAfterBet, int &joaca)
+{
+        int sumDealer=0,sumPlayer=0,i,j,pi,di,nrCards=2,nrAces=0,nrAcesDealer=0,nrAcesHand1=0,nrAcesHand2=0,surrender=0,splitChoice=0,firstCard,secondCard,sumFirstHand,sumSecondHand,nrCards1=2,nrCards2=2,bet1,bet2;
+        char choice,dealer[10][5],player[10][5],splitHand1[10][5],splitHand2[10][5];
+        cout<<" ---------------------------------"<<endl;
+        cout<<"|        Black Jack - Game        |"<<endl;
+        cout<<" ---------------------------------"<<endl<<endl;
+        srand(time(0));
+        for(i=0;i<=1;i++)
+            {
+            strcpy(dealer[i],drawCard(value));
+            sumDealer=sumDealer+value;
+            strcpy(player[i],drawCard(value));
+            if(i==0)
+                firstCard=value;
+            else
+                secondCard=value;
+            }
+        for(i=0;i<=1;i++)
+            {
+            if(strchr(player[i],'A')!=0)
+                nrAces++;
+            if(strchr(dealer[i],'A')!=0)
+                nrAcesDealer++;
+            }
+        if(player[0][0]==player[1][0])
+           splitChoice=1;
+        sumPlayer=firstCard+secondCard;
+        if(nrAcesDealer==2)
+            {
+            sumDealer=sumDealer-10;
+            }
+        if(nrAces==2)
+            {
+            sumPlayer=sumPlayer-10;
+            nrAces--;
+            }
+        cout<<"Dealer's hand: **"<<" "<<dealer[1]<<endl<<endl;
+        cout<<"Player's hand: "<<player[0]<<" "<<player[1]<<" "<<"("<<sumPlayer<<")";
+        cout<<endl;
+        pi=i;
+        di=i;
+        if(splitChoice==1)
+            {
+            cout<<endl;
+            cout<<"Would you like to Split(s) or play Normal(n)? Type your choice: ";
+            cin>>choice;
+            while(choice!='s' && choice!='n')
+                {
+                cout<<endl;
+                cout<<"You're choice is not valid. Please retype your choice."<<endl<<endl;
+                cout<<"Would you like to Split this hand(y) or play normal(n)? Type your choice: ";
+                cin>>choice;
+                }
+            if(choice=='s')
+                if(depositAfterBet-bet<0)
+                    {
+                    cout<<endl<<"You don't have enough money in your Deposit to make a Split. You automatically have to play with normal rules."<<endl;
+                    splitChoice=0;
+                    normalGameRules(sumPlayer,nrCards,surrender,nrAces,pi,player,depositAfterBet,bet,splitChoice);
+                    checkWin(sumPlayer,sumDealer,nrCards,surrender,di,dealer,depositAfterBet,bet,joaca,splitChoice);
+                    }
+                else
+                    {
+                    depositAfterBet=depositAfterBet-bet;
+                    strcpy(splitHand1[0],player[0]);
+                    strcpy(splitHand1[1],drawCard(value));
+                    sumFirstHand=firstCard+value;
+                    for(i=0;i<=1;i++)
+                        if(strchr(splitHand1[i],'A')!=0)
+                            nrAcesHand1++;
+                    if(nrAcesHand1==2)
+                        {
+                        sumFirstHand=sumFirstHand-10;
+                        nrAcesHand1--;
+                        }
+                    cout<<endl<<"This is your first hand: "<<endl;
+                    cout<<endl<<"Player's hand: "<<splitHand1[0]<<" "<<splitHand1[1]<<" "<<"("<<sumFirstHand<<")"<<endl;
+                    normalGameRules(sumFirstHand,nrCards1,surrender,nrAcesHand1,pi,splitHand1,depositAfterBet,bet,splitChoice);
+                    bet1=bet;
+                    pi=3;
+                    strcpy(splitHand2[0],player[1]);
+                    strcpy(splitHand2[1],drawCard(value));
+                    sumSecondHand=secondCard+value;
+                    for(i=0;i<=1;i++)
+                        if(strchr(splitHand2[i],'A')!=0)
+                            nrAcesHand2++;
+                    if(nrAcesHand2==2)
+                        {
+                        sumSecondHand=sumSecondHand-10;
+                        nrAcesHand2--;
+                        }
+                    cout<<endl<<"This is your second hand: "<<endl;
+                    cout<<endl<<"Player's hand: "<<splitHand2[0]<<" "<<splitHand2[1]<<" "<<"("<<sumSecondHand<<")"<<endl;
+                    normalGameRules(sumSecondHand,nrCards2,surrender,nrAcesHand2,pi,splitHand2,depositAfterBet,bet,splitChoice);
+                    bet2=bet;
+                    cout<<endl<<"------------------"<<endl;
+                    cout<<endl<<"For the first hand: "<<endl;
+                    checkWin(sumFirstHand,sumDealer,nrCards1,surrender,di,dealer,depositAfterBet,bet1,joaca,splitChoice);
+                    cout<<endl<<endl<<"For the second hand: "<<endl;
+                    checkWin(sumSecondHand,sumDealer,nrCards2,surrender,di,dealer,depositAfterBet,bet2,joaca,splitChoice);
+                    checkPlayAgain(joaca);
+                    }
+            else
+                {
+                splitChoice=0;
+                normalGameRules(sumPlayer,nrCards,surrender,nrAces,pi,player,depositAfterBet,bet,splitChoice);
+                checkWin(sumPlayer,sumDealer,nrCards,surrender,di,dealer,depositAfterBet,bet,joaca,splitChoice);
+                }
+            }
+        else
+            {
+            normalGameRules(sumPlayer,nrCards,surrender,nrAces,pi,player,depositAfterBet,bet,splitChoice);
+            checkWin(sumPlayer,sumDealer,nrCards,surrender,di,dealer,depositAfterBet,bet,joaca,splitChoice);
+            }
 }
 void changeUser(char newUser[30], char user[30], char pass[30], char line[100])
 {
@@ -741,8 +858,8 @@ void option3()
     if(gasit==1)
         {
         system("CLS");
-        char newUser[30], newPass[30],x[10];
-        int newDeposit,iDeposit,n;
+        char newUser[30], newPass[30],x[10],newDeposit[30];
+        int sum,iDeposit,n;
         cout<<" ---------------------------------"<<endl;
         cout<<"|      Black Jack - Accounts      |"<<endl;
         cout<<" ---------------------------------"<<endl<<endl;
@@ -780,7 +897,16 @@ void option3()
                 cout<<"Your current Deposit is: "<<iDeposit<<".";
                 cout<<endl<<endl<<"It will be changed to the amount of money you type in now: ";
                 cin>>newDeposit;
-                strcpy(linieNoua,changeDeposit(newDeposit,user,pass,line));
+                sum=atoi(newDeposit);
+                while(sum<10)
+                    {
+                    cout<<endl;
+                    cout<<"Your deposit needs to be higher or equal to 10 to be able to play."<<endl<<endl;
+                    cout<<"Please enter a new Deposit: ";
+                    cin>>newDeposit;
+                    sum=atoi(newDeposit);
+                    }
+                changeDeposit(sum,user,pass,line);
                 cout<<endl<<"Your money has successfully been added to your account.";
                 break;
             }
