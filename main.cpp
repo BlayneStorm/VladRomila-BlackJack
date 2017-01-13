@@ -1100,12 +1100,15 @@ void option2()
                 strcat(linieNoua2," ");
                 strcat(linieNoua2,depositChar2);
                 strcpy(linie2,linieNoua2);
-                cout<<"Redirecting to the bets page.";
-                Sleep(1000);
-                cout<<".";
-                Sleep(1000);
-                cout<<".";
-                Sleep(1000);
+                if(joaca==1)
+                    {
+                    cout<<"Redirecting to the bets page.";
+                    Sleep(1000);
+                    cout<<".";
+                    Sleep(1000);
+                    cout<<".";
+                    Sleep(1000);
+                    }
                 }
             changeDeposit(nume1,parola1,linie1);
             changeDeposit(nume2,parola2,linie2);
