@@ -944,8 +944,8 @@ void option1()
             bet=depositBeforeBet-depositAfterBet;
             system("CLS");
             playGamevsComputer(bet,depositAfterBet,joaca);
-            cout<<"deposit after bet is: "<<depositAfterBet<<" si joacaul e: "<<joaca;
-            Sleep(4000);
+            //cout<<"Deposit after bet is: "<<depositAfterBet<<" si 'Jocul' e: "<<joaca;
+            //Sleep(4000);
             itoa(depositAfterBet,depositChar,10);
             strcpy(linieNoua,nume);
             strcat(linieNoua," ");
@@ -969,8 +969,8 @@ void option1()
             bet=depositBeforeBet-depositAfterBet;
             system("CLS");
             playGamevsComputer(bet,depositAfterBet,joaca);
-            cout<<endl<<"deposit after bet is: "<<depositAfterBet<<" si joacaul e: "<<joaca;
-            Sleep(4000);
+            //cout<<"Deposit after bet is: "<<depositAfterBet<<" si 'Jocul' e: "<<joaca;
+            //Sleep(4000);
             itoa(depositAfterBet,depositChar,10);
             strcpy(linieNoua,nume);
             strcat(linieNoua," ");
